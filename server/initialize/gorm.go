@@ -33,6 +33,7 @@ func RegisterTables() {
 	err := db.AutoMigrate(
 
 		system.SysApi{},
+		system.SysIgnoreApi{},
 		system.SysUser{},
 		system.SysBaseMenu{},
 		system.JwtBlacklist{},
@@ -44,9 +45,10 @@ func RegisterTables() {
 		system.SysBaseMenuParameter{},
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
-		system.SysAutoCode{},
+		system.SysAutoCodePackage{},
 		system.SysExportTemplate{},
 		system.Condition{},
+		system.JoinTemplate{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},
@@ -55,6 +57,13 @@ func RegisterTables() {
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))
+		os.Exit(0)
+	}
+
+	err = bizModel()
+
+	if err != nil {
+		global.GVA_LOG.Error("register biz_table failed", zap.Error(err))
 		os.Exit(0)
 	}
 	global.GVA_LOG.Info("register table success")
